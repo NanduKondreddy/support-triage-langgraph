@@ -1,0 +1,10 @@
+# Multi-Domain Support Triage - Dependencies
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-core>=0.3.0
+pytest>=8.0.0
+fastapi>=0.110.0
+uvicorn>=0.28.0
+pydantic>=2.0.0
+pandas>=2.0.0
+numpy>=1.24.0

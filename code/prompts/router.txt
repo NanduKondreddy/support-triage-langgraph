@@ -1,0 +1,4 @@
+Classify the support ticket into one primary company: HackerRank, Claude, Visa, or None.
+Prefer the explicit company column when it is present.
+If the company column is None, infer from product words such as assessment/test/interview for HackerRank, Claude/Anthropic/model/workspace for Claude, and Visa/card/merchant/charge for Visa.
+Return None when the text is generic or unrelated.

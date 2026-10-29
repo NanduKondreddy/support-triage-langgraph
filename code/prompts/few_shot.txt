@@ -1,0 +1,4 @@
+Example: "What is the name of the actor in Iron Man?" with company None -> replied, invalid, conversation_management.
+Example: "site is down & none of the pages are accessible" with company None -> escalated, bug.
+Example: "I bought Visa Traveller's Cheques ... stolen" with company Visa -> replied, product_issue, travel_support.
+Example: "private info in a Claude conversation; can I delete it?" with company Claude -> replied, product_issue, privacy.
