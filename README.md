@@ -1,12 +1,14 @@
 # Multi-Domain Support Triage Agent (LangGraph Architecture)
 
+Extends my HackerRank Orchestrate submission: https://github.com/NanduKondreddy/Multi-Domain-Support-Triage
+
 A deterministic, safety-first support ticket triage agent built with **LangGraph** and **LangChain** for HackerRank, Claude, and Visa enterprise support domains. The agent coordinates stateful execution across discrete stages—safety filtering, input resilience, domain/intent classification, hybrid retrieval, dual-signal grounding verification, and controlled answer building versus human escalation.
 
 ---
 
 ## 🏗️ LangGraph StateGraph Architecture
 
-The system compiles an auditable StateGraph with conditional routing edges that guarantee zero-hallucination answers and prioritize human escalation on policy, security, authority, or ambiguity flags.
+The system compiles an auditable StateGraph. Conditional routing edges send low-confidence, ungrounded, unsafe or ambiguous tickets to a human instead of answering.
 
 ```mermaid
 ---
@@ -72,7 +74,7 @@ Evaluation performed using `evaluate.py` on an unseen, held-out set of 20 realis
 
 ---
 
-## 🔄 Baseline Comparison (Step 5 Match)
+## 🔄 Comparison with the earlier pipeline
 
 On the official `support_issues.csv` dataset (29 tickets), the LangGraph pipeline was compared against a patched copy of the earlier baseline pipeline:
 
@@ -118,7 +120,7 @@ python code/main.py --pipeline legacy --output support_issues/legacy_output.csv
 
 Execute the full pytest test suite (20 unit & routing tests):
 ```bash
-pytest tests/
+python -m pytest tests
 ```
 
 ### 4. Run Benchmark Evaluation
@@ -133,8 +135,10 @@ python evaluate.py
 
 ### Run Locally with Uvicorn
 ```bash
-uvicorn code.api:app --host 0.0.0.0 --port 8000
+uvicorn api:app --app-dir code --host 0.0.0.0 --port 8000
 ```
+
+> The Dockerfile has not been built or run yet. The API was tested locally with uvicorn.
 
 ### Run with Docker
 ```bash
@@ -170,5 +174,5 @@ curl -X POST http://localhost:8000/triage \
 ## ⚠️ Limitations & Failure Modes
 
 1. **Strict Tri-Domain Scope:** The retriever and corpus are tailored for HackerRank, Claude, and Visa. Out-of-scope inquiries (e.g. weather, recipes) are marked invalid and safely routed away.
-2. **Conservative Decision Boundaries:** High confidence threshold (`CONF_HIGH = 0.65`) prevents hallucination but occasionally escalates borderline edge cases where documentation is sparse.
+2. **Conservative Decision Boundaries:** High confidence threshold (`CONF_HIGH = 0.65`) reduces the risk of unsupported answers but occasionally escalates borderline edge cases where documentation is sparse.
 3. **Multi-Domain Ambiguity:** Cross-domain conflicting queries (e.g. asking about Visa payments and Claude model errors simultaneously) are immediately escalated for manual human triage.
